@@ -63,18 +63,38 @@ end
 function profession_query.respond(message, sender)
 	local _, _, pattern = strfind(message, '^%?(.+)')
 	if pattern then
+	
+		local matches = {}
 		for _, skill in pairs(profession_query_skills) do
 			if strfind(strlower(skill.name), strlower(pattern)) then
-				local response = skill.link..' ='
-				for i, reagent in ipairs(skill.reagents) do
-					response = response..string.format(
-						' %s x %i',
-						reagent.link,
-						reagent.count
-					)
-				end
-				SendChatMessage(response ,'WHISPER' ,nil , sender)
+				tinsert(matches, skill)
 			end
+		end
+		
+		local total_matches = getn(matches)
+		
+		while getn(matches) > 3 do
+			tremove(matches, getn(matches))
+		end
+		
+		if getn(matches) == 0 then
+			SendChatMessage('No matches for '..pattern ,'WHISPER', nil, sender)
+		elseif getn(matches) < total_matches then
+			SendChatMessage('Matches for '..pattern..' ('..(total_matches - 3)..' omitted):' ,'WHISPER', nil, sender)
+		else
+			SendChatMessage('Matches for '..pattern..':' ,'WHISPER', nil, sender)
+		end
+		
+		for _, match in ipairs(matches) do
+			local response = match.link..' ='
+			for i, reagent in ipairs(match.reagents) do
+				response = response..string.format(
+					' %s x %i',
+					reagent.link,
+					reagent.count
+				)
+			end
+			SendChatMessage(response ,'WHISPER', nil, sender)
 		end
 	end
 end
