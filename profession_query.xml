@@ -5,6 +5,7 @@
       <Scripts> 
 			<OnLoad> 
 				this:RegisterEvent('TRADE_SKILL_SHOW')
+				this:RegisterEvent('CRAFT_SHOW')
 				this:RegisterEvent('CHAT_MSG_WHISPER')
 			</OnLoad>
 			<OnEvent> 
