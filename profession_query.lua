@@ -16,7 +16,6 @@ function profession_query.update_skills()
 		local name, entry_type = GetTradeSkillInfo(i)
 		if entry_type == 'header' then
 			category = name
-			snipe.log(name)
 		else
 			local link = GetTradeSkillItemLink(i)
 			if not profession_query_skills[link] then
@@ -40,19 +39,20 @@ function profession_query.update_skills()
 end
 
 function profession_query.respond(message, sender)
-	for _, skill in pairs(profession_query_skills) do
-		if strfind(strlower(skill.name), strlower(message)) then
-			SendChatMessage(skill.link ,'WHISPER' ,'Common' , sender)
-			for i, reagent in ipairs(skill.reagents) do
-				local reagent_message = string.format(
-					'[reagent %i] %s x %i',
-					i,
-					reagent.link,
-					reagent.count
-				)
-				SendChatMessage(reagent_message ,'WHISPER' ,'Common' , sender)
+	local _, _, pattern = strfind(message, '^%?(.+)')
+	if pattern then
+		for _, skill in pairs(profession_query_skills) do
+			if strfind(strlower(skill.name), strlower(pattern)) then
+				local response = skill.link..' ='
+				for i, reagent in ipairs(skill.reagents) do
+					response = response..string.format(
+						' %s x %i',
+						reagent.link,
+						reagent.count
+					)
+				end
+				SendChatMessage(response ,'WHISPER' ,'Common' , sender)
 			end
-			snipe.log(skill.link)
 		end
 	end
 end
