@@ -13,12 +13,9 @@ function profession_query.on_event()
 end
 
 function profession_query.update_craft()
-	local category
 	for i=1,GetNumCrafts() do
 		local name, _, entry_type = GetCraftInfo(i)
-		if entry_type == 'header' then
-			category = name
-		else
+		if entry_type ~= 'header' then
 			local link = GetCraftItemLink(i)
 			if not profession_query_skills[link] then
 				local reagents = {}
@@ -31,7 +28,6 @@ function profession_query.update_craft()
 				
 				profession_query_skills[link] = {
 					name = name,
-					category = category,
 					link = link,
 					reagents = reagents,
 				}
@@ -41,12 +37,9 @@ function profession_query.update_craft()
 end
 
 function profession_query.update_trade_skill()
-	local category
 	for i=1,GetNumTradeSkills() do
 		local name, entry_type = GetTradeSkillInfo(i)
-		if entry_type == 'header' then
-			category = name
-		else
+		if entry_type ~= 'header' then
 			local link = GetTradeSkillItemLink(i)
 			if not profession_query_skills[link] then
 				local reagents = {}
@@ -59,7 +52,6 @@ function profession_query.update_trade_skill()
 				
 				profession_query_skills[link] = {
 					name = name,
-					category = category,
 					link = link,
 					reagents = reagents,
 				}
