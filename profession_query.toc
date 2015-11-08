@@ -1,0 +1,5 @@
+## Interface: 11200
+## Title: Profession Query
+## Notes: Lets other players query your skills and their reagents
+## SavedVariablesPerCharacter: profession_query_skills
+profession_query.xml
