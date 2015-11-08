@@ -51,7 +51,7 @@ function profession_query.respond(message, sender)
 						reagent.count
 					)
 				end
-				SendChatMessage(response ,'WHISPER' ,'Common' , sender)
+				SendChatMessage(response ,'WHISPER' ,nil , sender)
 			end
 		end
 	end
