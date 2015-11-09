@@ -86,15 +86,20 @@ function profession_query.respond(message, sender)
 		end
 		
 		for _, match in ipairs(matches) do
-			local response = match.link..' ='
+			local partial_response = match.link..' ='
 			for i, reagent in ipairs(match.reagents) do
-				response = response..string.format(
-					' %s x %i',
+				local reagent_info = string.format(
+					'%s x %i',
 					reagent.link,
 					reagent.count
 				)
+				if strlen(partial_response..reagent_info) > 255 then
+					SendChatMessage(partial_response ,'WHISPER', nil, sender)
+					partial_response = '(cont.)'
+				end
+				partial_response = partial_response..' '..reagent_info
 			end
-			SendChatMessage(response ,'WHISPER', nil, sender)
+			SendChatMessage(partial_response ,'WHISPER', nil, sender)
 		end
 	end
 end
