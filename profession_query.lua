@@ -98,7 +98,7 @@ function private.update_profession(profession_type)
 end
 
 function private.respond(message, sender)
-	local _, _, pattern_string = strfind(message, '^%?(.*)')
+	local _, _, pattern_string = strfind(message, '^%?(.+)')
 	if pattern_string then
 		local patterns = private.split_on_whitespace(pattern_string)
 
