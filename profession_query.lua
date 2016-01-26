@@ -195,10 +195,42 @@ function SlashCmdList.PQ(parameter)
 		end
 		private.last_printed_response = response
 	elseif parameters[1] == 'send' then
-		local player = parameters[2] or (ChatEdit_GetLastTellTarget(ChatFrameEditBox) ~= '' and ChatEdit_GetLastTellTarget(ChatFrameEditBox))
+		local player = parameters[2]
 		if player then
-			for _, partial_response in ipairs(private.last_printed_response or {}) do
-				private.whisper(player, partial_response)
+			if parameters[3] then
+				tremove(parameters, 1)
+				tremove(parameters, 1)
+				local response = private.response(parameters)
+				for i, partial_response in ipairs(response) do
+					if i > 1 then
+						private.whisper(player, partial_response)
+					end
+				end
+			else
+				for i, partial_response in ipairs(private.last_printed_response or {}) do
+					if i > 1 then
+						private.whisper(player, partial_response)
+					end
+				end
+			end
+		end
+	elseif parameters[1] == 'reply' then
+		local player = ChatEdit_GetLastTellTarget(ChatFrameEditBox) ~= '' and ChatEdit_GetLastTellTarget(ChatFrameEditBox)
+		if player then
+			if parameters[2] then
+				tremove(parameters, 1)
+				local response = private.response(parameters)
+				for i, partial_response in ipairs(response) do
+					if i > 1 then
+						private.whisper(player, partial_response)
+					end
+				end
+			else
+				for i, partial_response in ipairs(private.last_printed_response or {}) do
+					if i > 1 then
+						private.whisper(player, partial_response)
+					end
+				end
 			end
 		end
 	end
